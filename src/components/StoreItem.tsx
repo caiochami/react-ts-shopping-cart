@@ -1,4 +1,5 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatCurrency } from "../utilities/formatCurrency";
 
 type StoreItemProps = {
@@ -9,8 +10,15 @@ type StoreItemProps = {
   color: string;
 };
 
-export function StoreItem({ imgUrl, name, price, color }: StoreItemProps) {
-  const quantity = 0;
+export function StoreItem({ id, imgUrl, name, price, color }: StoreItemProps) {
+  const {
+    getItemQuantity,
+    increaseCartQuantity,
+    decreaseCartQuantity,
+    removeFromCart,
+  } = useShoppingCart();
+
+  const quantity = getItemQuantity(id);
 
   return (
     <div>
@@ -38,17 +46,18 @@ export function StoreItem({ imgUrl, name, price, color }: StoreItemProps) {
       </div>
       <div className="mt-6">
         {quantity === 0 ? (
-          <a
-            href="#"
-            className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200"
+          <button
+            className="w-full relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200"
+            onClick={() => increaseCartQuantity(id)}
           >
             Add to bag<span className="sr-only">, {name}</span>
-          </a>
+          </button>
         ) : (
           <div className="flex flex-col items-center gap-2">
             <div className="flex justify-center items-center gap-2">
               <button
                 type="button"
+                onClick={() => decreaseCartQuantity(id)}
                 className="inline-flex items-center rounded-full border border-transparent bg-indigo-600 p-1 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <MinusIcon className="h-5 w-5" aria-hidden="true" />
@@ -58,6 +67,7 @@ export function StoreItem({ imgUrl, name, price, color }: StoreItemProps) {
               </div>
               <button
                 type="button"
+                onClick={() => increaseCartQuantity(id)}
                 className="inline-flex items-center rounded-full border border-transparent bg-indigo-600 p-1 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <PlusIcon className="h-5 w-5" aria-hidden="true" />
@@ -66,6 +76,7 @@ export function StoreItem({ imgUrl, name, price, color }: StoreItemProps) {
             <div>
               <button
                 type="button"
+                onClick={() => removeFromCart(id)}
                 className="inline-flex items-center rounded border border-red-300 bg-white px-2.5 py-1.5 text-xs font-medium text-red-700 shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
                 Remove
