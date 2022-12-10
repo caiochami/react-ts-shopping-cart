@@ -6,6 +6,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -18,8 +19,10 @@ function classNames(...classes: string[]) {
 }
 
 export function Navbar() {
+  const { cartQuantity, openCart } = useShoppingCart();
+
   return (
-    <Disclosure as="nav" className="bg-gray-800 sticky top-0">
+    <Disclosure as="nav" className="bg-gray-800 top-0 z-10">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -77,18 +80,24 @@ export function Navbar() {
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-                <div className="md:ml-4 md:flex md:flex-shrink-0 md:items-center relative">
-                  <button
-                    type="button"
-                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                  >
-                    <span className="sr-only">Shopping Cart</span>
-                    <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                  <div className="rounded-full bg-red-500 text-white absolute -right-1 -bottom-1 w-4 h-4 text-xs flex justify-center">
-                    1
+                {cartQuantity > 0 && (
+                  <div className="md:ml-4 md:flex md:flex-shrink-0 md:items-center relative">
+                    <button
+                      type="button"
+                      onClick={openCart}
+                      className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      <span className="sr-only">Shopping Cart</span>
+                      <ShoppingCartIcon
+                        className="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </button>
+                    <div className="rounded-full bg-red-500 text-white absolute -right-1 -bottom-1 w-4 h-4 text-xs flex justify-center">
+                      {cartQuantity}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

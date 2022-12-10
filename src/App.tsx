@@ -9,7 +9,7 @@ function App() {
   return (
     <ShoppingCartProvider>
       <Navbar />
-      <div className="h-screen bg-gray-100">
+      <div className="h-full bg-gray-100">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/store" element={<Store />} />
